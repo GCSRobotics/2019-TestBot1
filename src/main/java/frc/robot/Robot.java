@@ -10,6 +10,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.Spark;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.Victor;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 
@@ -23,62 +24,64 @@ public class Robot extends IterativeRobot {
   private Victor m_rightDriveMotor;
 
   private Joystick m_joystick;
-  
+
   private Victor m_pickupMotor;
   private Victor m_throwingMotor;
-  
 
   @Override
   public void robotInit() {
-    //Drivetrain
+    // Drivetrain
     m_leftDriveMotor = new Victor(0);
     m_rightDriveMotor = new Victor(1);
     m_myRobot = new DifferentialDrive(m_leftDriveMotor, m_rightDriveMotor);
 
-    //Extensions
+    // Extensions
     m_pickupMotor = new Victor(2);
     m_throwingMotor = new Victor(3);
 
-    //Joysticks
+    // Joysticks
     m_joystick = new Joystick(0);
   }
 
   @Override
+  public void autonomousInit() {
+    m_myRobot.setSafetyEnabled(false);
+
+    // Spin at half speed for two seconds
+    m_myRobot.arcadeDrive(0.5, 0.0);
+    Timer.delay(2.0);
+
+    // Stop robot
+    m_myRobot.arcadeDrive(0.0, 0.0);
+  }
+
+  @Override
   public void teleopPeriodic() {
+    m_myRobot.setSafetyEnabled(true);
     m_myRobot.tankDrive(m_joystick.getRawAxis(0), m_joystick.getRawAxis(1));
 
-    //Operate the pickup
-    if (m_joystick.getRawButton(0))
-    { 
-      //Forward
-      m_pickupMotor.set(1); 
-    }
-    else if (m_joystick.getRawButton(1))
-    { 
-      //Reverse
-      m_pickupMotor.set(-1); 
-    }
-    else
-    { 
-      //Stop
-      m_pickupMotor.set(0); 
+    // Operate the pickup
+    if (m_joystick.getRawButton(0)) {
+      // Forward
+      m_pickupMotor.set(1);
+    } else if (m_joystick.getRawButton(1)) {
+      // Reverse
+      m_pickupMotor.set(-1);
+    } else {
+      // Stop
+      m_pickupMotor.set(0);
     }
 
-    //Operate the Thrower
-    if (m_joystick.getRawButton(2))
-    { 
-      //Forward
-      m_throwingMotor.set(1); 
-    }
-    else if (m_joystick.getRawButton(3))
-    { 
-      //Reverse
-      m_throwingMotor.set(-1); 
-    }
-    else
-    { 
-      //Stop
-      m_throwingMotor.set(0); 
+    // Operate the Thrower
+    if (m_joystick.getRawButton(2)) {
+      // Forward
+      m_throwingMotor.set(1);
+    } else if (m_joystick.getRawButton(3)) {
+      // Reverse
+      m_throwingMotor.set(-1);
+    } else {
+      // Stop
+      m_throwingMotor.set(0);
     }
   }
 }
