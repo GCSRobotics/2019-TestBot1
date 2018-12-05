@@ -36,6 +36,6 @@ public class Robot extends IterativeRobot {
 
   @Override
   public void teleopPeriodic() {
-    m_myRobot.tankDrive(-m_joystick.getRawAxis(0), m_joystick.getRawAxis(1));
+    m_myRobot.tankDrive(m_joystick.getRawAxis(0), m_joystick.getRawAxis(1));
   }
 }
